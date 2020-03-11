@@ -46,9 +46,49 @@ def line(x1,y1,x2,y2,r,g,b):
             extra += m
             shift=round(extra)
 
-def parametricCircle(x,y,z,r,trate=100):
+def parametricCircle(x,y,z,r,trate=2000):
     for i in range(trate):
-        addLine(x+r*cos(2*math.pi*i/trate),y+r*cos(2*math.pi*i/trate),z,x+r*cos(2*math.pi*(i+1)/trate),y+r*cos(2*math.pi*(i+1)/trate),z)
+        addLine(x+r*math.cos(2*math.pi*i/trate),y+r*math.sin(2*math.pi*i/trate),z,x+r*math.cos(2*math.pi*(i+1)/trate),y+r*math.sin(2*math.pi*(i+1)/trate),z)
+
+def bezier(x1,y1,x2,y2,x3,y3,x4,y4,trate=1000):
+    ax = (-x1 + 3 * x2 - 3*x3 + x4)
+    bx = (3*x1-6*x2+3*x3)
+    cx = -3*x1+3*x2
+    dx = x1
+    ay = (-y1 + 3 * y2 - 3*y3 + y4)
+    by = (3*y1-6*y2+3*y3)
+    cy = -3*y1+3*y2
+    dy = y1
+    for i in range(trate):
+        t=i/trate
+        p1x = ax*t**3+bx*t**2+cx*t+dx
+        p1y = ay*t**3+by*t**2+cy*t+dy
+        p1z = 0
+        s = t + 1/trate
+        p2x = ax*(s)**3+bx*(s)**2+cx*(s)+dx
+        p2y = ay*(s)**3+by*(s)**2+cy*(s)+dy
+        p2z = 0
+        addLine(p1x,p1y,p1z,p2x,p2y,p2z)
+
+def hermite(x1,y1,x2,y2,x3,y3,x4,y4,trate=1000):
+    ax = 2*x1-2*x2+x3+x4
+    bx = -3*x1+3*x2-2*x3-x4
+    cx = x3
+    dx = x4
+    ay = 2*y1-2*y2+y3+y4
+    by = -3*y1+3*y2-2*y3-y4
+    cy = y3
+    dy = y4
+    for i in range(trate):
+        t=i/trate
+        p1x = ax*t**3+bx*t**2+cx*t+dx
+        p1y = ay*t**3+by*t**2+cy*t+dy
+        p1z = 0
+        s = t + 1/trate
+        p2x = ax*(s)**3+bx*(s)**2+cx*(s)+dx
+        p2y = ay*(s)**3+by*(s)**2+cy*(s)+dy
+        p2z = 0
+        addLine(p1x,p1y,p1z,p2x,p2y,p2z)
 
 def matrixMult(a,b):
     for i in range(len(b)):
@@ -131,7 +171,6 @@ def ident():
     transformMatrix[2] = [0,0,1,0]
     transformMatrix[3] = [0,0,0,1]
 
-+r*cos(2*math.pi*i/trate)
 
 def rotz(deg):
     rotAngle = deg/180 * math.pi
@@ -189,8 +228,8 @@ def display(name):
     fout.write("P3\n"+str(size)+" "+str(size)+"\n255\n")
     for i in range(size):
         for j in range(size):
-            fout.write(str(pixels[i][j][0])+" "+str(pixels[i][j][1])+" "+str(pixels[i][j][2])+" ")
-            pixels[i][j]=[255,255,255]
+            fout.write(str(pixels[j][499-i][0])+" "+str(pixels[j][499-i][1])+" "+str(pixels[j][499-i][2])+" ")
+            pixels[j][499-i]=[255,255,255]
         fout.write("\n")
     print("The image file is "+name)
     fout.close()
@@ -245,9 +284,13 @@ def readScript(filename):
             coms.pop(0)
             coms.pop(0)
         elif(coms[0]=="hermite"):
+            coms[1]=coms[1].split(" ")
+            hermite(int(coms[1][0]),int(coms[1][1]),int(coms[1][2]),int(coms[1][3]),int(coms[1][4]),int(coms[1][5]),int(coms[1][6]),int(coms[1][7]))
             coms.pop(0)
             coms.pop(0)
         elif(coms[0]=="bezier"):
+            coms[1]=coms[1].split(" ")
+            bezier(int(coms[1][0]),int(coms[1][1]),int(coms[1][2]),int(coms[1][3]),int(coms[1][4]),int(coms[1][5]),int(coms[1][6]),int(coms[1][7]))
             coms.pop(0)
             coms.pop(0)
         elif(coms[0]=="save"):
@@ -265,4 +308,4 @@ transformMatrix = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]
 
 
 
-readScript("marioscript")
+readScript("script")
