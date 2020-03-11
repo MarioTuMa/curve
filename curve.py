@@ -74,11 +74,11 @@ def hermite(x1,y1,x2,y2,x3,y3,x4,y4,trate=1000):
     ax = 2*x1-2*x2+x3+x4
     bx = -3*x1+3*x2-2*x3-x4
     cx = x3
-    dx = x4
+    dx = x1
     ay = 2*y1-2*y2+y3+y4
     by = -3*y1+3*y2-2*y3-y4
     cy = y3
-    dy = y4
+    dy = y1
     for i in range(trate):
         t=i/trate
         p1x = ax*t**3+bx*t**2+cx*t+dx
@@ -152,7 +152,7 @@ def circle(centerx,centery,pointx,pointy):
         #     matrixPrint(lineMatrix)
 
         matrixMult(rotMatrix,lineMatrix)
-        matrixPrint(lineMatrix)
+        #matrixPrint(lineMatrix)
     matrixDraw()
 
 
@@ -218,7 +218,7 @@ def drawlines():
     i = 0
     #print(lineMatrix)
     while(i<len(lineMatrix)):
-        print(lineMatrix[i][0],lineMatrix[i][1],lineMatrix[i+1][0],lineMatrix[i+1][1],0,0,0)
+        #print(lineMatrix[i][0],lineMatrix[i][1],lineMatrix[i+1][0],lineMatrix[i+1][1],0,0,0)
         line(lineMatrix[i][0],lineMatrix[i][1],lineMatrix[i+1][0],lineMatrix[i+1][1],0,0,0)
         i+=2
 
@@ -242,7 +242,7 @@ def readScript(filename):
     #print(coms)
     while(len(coms)>0):
         #print(len(coms),coms[0])
-        matrixPrint(transformMatrix)
+        #matrixPrint(transformMatrix)
         if(coms[0]=="line"):
             coms[1]=coms[1].split(" ")
             addLine(int(coms[1][0]),int(coms[1][1]),int(coms[1][2]),int(coms[1][3]),int(coms[1][4]),int(coms[1][5]))
